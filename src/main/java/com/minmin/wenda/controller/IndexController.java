@@ -24,7 +24,7 @@ import java.util.*;
  * @version 1.0.0
  */
 
-@Controller
+// @Controller
 public class IndexController {
 
     @Autowired
