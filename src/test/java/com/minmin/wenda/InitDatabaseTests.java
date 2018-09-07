@@ -1,7 +1,9 @@
 package com.minmin.wenda;
 
+import com.minmin.wenda.dao.LoginTicketDAO;
 import com.minmin.wenda.dao.QuestionDAO;
 import com.minmin.wenda.dao.UserDAO;
+import com.minmin.wenda.model.LoginTicket;
 import com.minmin.wenda.model.Question;
 import com.minmin.wenda.model.User;
 import org.junit.Assert;
@@ -25,6 +27,9 @@ public class InitDatabaseTests {
 
 	@Autowired
 	QuestionDAO questionDAO;
+
+	@Autowired
+	LoginTicketDAO loginTicketDAO;
 
 	@Test
 	public void initDatabase() {
@@ -60,6 +65,9 @@ public class InitDatabaseTests {
 		Assert.assertNull(userDAO.selectById(1));
 
 		System.out.print(questionDAO.selectLatestQuestions(0, 0, 10));
+		LoginTicket loginTicket = new LoginTicket();
+		loginTicket.setUserId(1);
+		loginTicketDAO.addTicket(loginTicket);
 	}
 
 }

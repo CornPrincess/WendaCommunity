@@ -1,6 +1,8 @@
 package com.minmin.wenda.service;
 
+import com.minmin.wenda.dao.LoginTicketDAO;
 import com.minmin.wenda.dao.UserDAO;
+import com.minmin.wenda.model.LoginTicket;
 import com.minmin.wenda.model.User;
 import com.minmin.wenda.util.WendaUtil;
 import org.apache.commons.lang.StringUtils;
@@ -8,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author corn
@@ -21,6 +20,10 @@ import java.util.UUID;
 public class UserService {
     @Autowired
     UserDAO userDAO;
+
+    @Autowired
+    LoginTicketDAO loginTicketDAO;
+
 
     /*
         select user by id service
@@ -61,10 +64,17 @@ public class UserService {
 
         // add user
         userDAO.addUser(user);
+
+        // add ticket
+        String ticket = addLoginTicket(user.getId());
+        map.put("ticket", ticket);
+
         return map;
     }
 
-
+    /*
+        login user service
+     */
     public Map<String, String> login(String username, String password) {
         Map<String, String> map = new HashMap<>();
 
@@ -82,6 +92,11 @@ public class UserService {
         if(user == null) {
             map.put("msg", "用户名不存在");
             return map;
+
+
+
+
+
         }
 
         // 检验密码
@@ -89,6 +104,29 @@ public class UserService {
             map.put("msg", "密码错误");
             return map;
         }
+
+        // add ticket
+        String ticket = addLoginTicket(user.getId());
+        map.put("ticket", ticket);
+
         return map;
     }
+
+    /*
+        add ticket
+     */
+    public  String addLoginTicket(int userId) {
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setUserId(userId);
+        Date expireDate = new Date();
+        expireDate.setTime(3600*24*100 + expireDate.getTime());
+        loginTicket.setExpired(expireDate);
+        loginTicket.setStatus(0);
+        loginTicket.setTicket(UUID.randomUUID().toString().replaceAll("-", ""));
+
+        loginTicketDAO.addTicket(loginTicket);
+
+        return loginTicket.getTicket();
+    }
+
 }
