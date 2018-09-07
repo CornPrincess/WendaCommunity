@@ -81,7 +81,7 @@ public class LoginController {
             }
 
         } catch (Exception e) {
-            logger.error("注册异常" + e.getMessage());
+            logger.error("登录异常" + e.getMessage());
             return  "login";
         }
 

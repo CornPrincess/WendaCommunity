@@ -112,9 +112,10 @@ public class UserService {
      */
     public  String addLoginTicket(int userId) {
         LoginTicket loginTicket = new LoginTicket();
+
         loginTicket.setUserId(userId);
         Date expireDate = new Date();
-        expireDate.setTime(3600*24*100 + expireDate.getTime());
+        expireDate.setTime(3600*24*1000 + expireDate.getTime());
         loginTicket.setExpired(expireDate);
         loginTicket.setStatus(0);
         loginTicket.setTicket(UUID.randomUUID().toString().replaceAll("-", ""));
