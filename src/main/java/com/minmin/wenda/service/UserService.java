@@ -3,6 +3,7 @@ package com.minmin.wenda.service;
 import com.minmin.wenda.dao.UserDAO;
 import com.minmin.wenda.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +15,9 @@ public class UserService {
     @Autowired
     UserDAO userDAO;
 
+    /*
+        select user by id service
+     */
     public User getUser(int id){
         return userDAO.selectById(id);
     }

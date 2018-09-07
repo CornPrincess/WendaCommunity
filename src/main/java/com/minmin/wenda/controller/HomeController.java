@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
+ * the index controller of the page
  * @author corn
  * @version 1.0.0
  */
@@ -33,20 +33,21 @@ public class HomeController {
     @Autowired
     QuestionService questionService;
 
+    // user controller
     @RequestMapping(path={"/user/{userId}"}, method = {RequestMethod.GET})
     public String UserIndex(Model model, @PathVariable("userId") int userId) {
         model.addAttribute("vos", getQuestions(userId, 0, 10));
         return "index";
     }
 
-
-
+    // index controller
     @RequestMapping(path={"/", "/index"}, method = {RequestMethod.GET})
     public String index(Model model) {
         model.addAttribute("vos", getQuestions(0, 0, 10));
         return "index";
     }
 
+    // return the ViewObject List
     private List<ViewObject> getQuestions(int userId, int offset, int limit) {
         List<Question> questionList = questionService.getLatestQuestions(userId, offset, limit);
         List<ViewObject> vos = new ArrayList<>();

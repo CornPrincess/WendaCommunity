@@ -17,6 +17,9 @@ public class QuestionService {
     @Autowired
     QuestionDAO questionDAO;
 
+    /*
+        select LatestQuestions service (desc order)
+     */
     public List<Question> getLatestQuestions(int userId, int offset, int limit) {
         return questionDAO.selectLatestQuestions(userId, offset, limit);
     }
