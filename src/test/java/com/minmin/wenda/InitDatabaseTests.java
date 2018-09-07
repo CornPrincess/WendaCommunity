@@ -65,8 +65,14 @@ public class InitDatabaseTests {
 		Assert.assertNull(userDAO.selectById(1));
 
 		System.out.print(questionDAO.selectLatestQuestions(0, 0, 10));
+
+		// test the LoginticketDAO
 		LoginTicket loginTicket = new LoginTicket();
 		loginTicket.setUserId(1);
+		loginTicket.setStatus(1);
+		loginTicket.setTicket("123");
+		loginTicket.setExpired(new Date());
+		loginTicket.setId(1);
 		loginTicketDAO.addTicket(loginTicket);
 	}
 

@@ -22,7 +22,7 @@ CREATE TABLE `question` (
 
 DROP TABLE IF EXISTS `login_ticket`;
 CREATE TABLE `wenda`.`login_ticket` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `ticket` VARCHAR(45) NOT NULL,
   `expired` DATETIME NOT NULL,

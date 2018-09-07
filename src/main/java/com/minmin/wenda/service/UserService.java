@@ -92,11 +92,6 @@ public class UserService {
         if(user == null) {
             map.put("msg", "用户名不存在");
             return map;
-
-
-
-
-
         }
 
         // 检验密码
