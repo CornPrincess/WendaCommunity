@@ -2,6 +2,7 @@ package com.minmin.wenda.interceptor;
 
 import com.minmin.wenda.dao.LoginTicketDAO;
 import com.minmin.wenda.dao.UserDAO;
+import com.minmin.wenda.model.HostHolder;
 import com.minmin.wenda.model.LoginTicket;
 import com.minmin.wenda.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class PassportInterceptor implements HandlerInterceptor {
     @Autowired
     UserDAO userDAO;
 
+    @Autowired
+    HostHolder hostHolder;
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -49,7 +53,10 @@ public class PassportInterceptor implements HandlerInterceptor {
                 return true;
             }
 
+            // 通过ticket找到对应的user对象
             User user = userDAO.selectById(loginTicket.getUserId());
+            // 在拦截器最早的时候，将用户信息放入Threadlocal，后面所有的请求都可以访问这个变量
+            hostHolder.setUser(user);
 
 
 
@@ -59,11 +66,16 @@ public class PassportInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        // TODO modelAndView, 在渲染之前将user放入到model中，这样每个model都能用到。
+        if (modelAndView != null) {
+            modelAndView.addObject("user", hostHolder.getUser());
+        }
 
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
+        // 清空Threadlocal里的用户
+        hostHolder.clear();
     }
 }
