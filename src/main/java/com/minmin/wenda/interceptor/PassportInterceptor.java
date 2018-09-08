@@ -57,11 +57,8 @@ public class PassportInterceptor implements HandlerInterceptor {
             User user = userDAO.selectById(loginTicket.getUserId());
             // 在拦截器最早的时候，将用户信息放入Threadlocal，后面所有的请求都可以访问这个变量
             hostHolder.setUser(user);
-
-
-
         }
-        return false;
+        return true;
     }
 
     @Override

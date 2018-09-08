@@ -108,6 +108,15 @@ public class UserService {
     }
 
     /*
+        logout service
+     */
+
+    public void logout(String ticket){
+        loginTicketDAO.updateStatus(ticket, 1);
+    }
+
+
+    /*
         add ticket
      */
     public  String addLoginTicket(int userId) {
