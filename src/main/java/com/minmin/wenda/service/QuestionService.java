@@ -17,6 +17,12 @@ public class QuestionService {
     @Autowired
     QuestionDAO questionDAO;
 
+
+    public int addQuestion(Question question) {
+        // TODO 敏感词过滤
+        return questionDAO.addQuestion(question) > 0 ? question.getId() : 0;
+    }
+
     /*
         select LatestQuestions service (desc order)
      */
