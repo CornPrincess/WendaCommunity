@@ -133,5 +133,4 @@ public class UserService {
 
         return loginTicket.getTicket();
     }
-
 }
