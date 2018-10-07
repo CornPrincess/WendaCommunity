@@ -2,7 +2,6 @@ package com.minmin.wenda.dao;
 
 import com.minmin.wenda.model.Question;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -34,5 +33,8 @@ public interface QuestionDAO {
                                          @Param("offset") int offset,
                                          @Param("limit") int limit);
 
+
+    @Select({"select ", SELECT_FILED, " from ", TABLE_NAME, " where id =#{id}"})
+    Question selectById(int id);
 
 }

@@ -100,6 +100,7 @@ public class SensitiveService implements InitializingBean {
 
     private TrieNode rootNode = new TrieNode();
 
+    // 过滤器
     public String filter(String text) {
         if (StringUtils.isBlank(text)) {
             return null;

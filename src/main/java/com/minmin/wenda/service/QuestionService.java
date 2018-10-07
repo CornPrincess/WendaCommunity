@@ -18,9 +18,14 @@ public class QuestionService {
     @Autowired
     QuestionDAO questionDAO;
 
+    @Autowired
+    SensitiveService sensitiveService;
+
 
     public int addQuestion(Question question) {
         // TODO 敏感词过滤
+        question.setContent(sensitiveService.filter(question.getContent()));
+        question.setTitle(sensitiveService.filter(question.getTitle()));
 
 
         // Html标签过滤
@@ -35,5 +40,9 @@ public class QuestionService {
      */
     public List<Question> getLatestQuestions(int userId, int offset, int limit) {
         return questionDAO.selectLatestQuestions(userId, offset, limit);
+    }
+
+    public Question selectById(int id) {
+        return questionDAO.selectById(id);
     }
 }
