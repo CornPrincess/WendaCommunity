@@ -1,5 +1,6 @@
 package com.minmin.wenda.service;
 
+import org.apache.commons.lang.CharUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,11 @@ public class SensitiveService implements InitializingBean {
 
         for (int i = 0; i < lineTxt.length(); i++) {
             Character c = lineTxt.charAt(i);
+
+            // 去除干扰词
+            if(isSymbol(c)) {
+                continue;
+            }
 
             TrieNode node = tempNode.getSubNode(c);
 
@@ -110,7 +116,19 @@ public class SensitiveService implements InitializingBean {
         while (position < text.length()) {
             char c = text.charAt(position);
 
+            // 如果是非法词，如空格等，直接跳过下一个
+            if(isSymbol(c)) {
+                if(tempNode == rootNode) {
+                    result.append(c);
+                    begin++;
+                }
+
+                position++;
+                continue;
+            }
+
             tempNode = tempNode.getSubNode(c);
+
 
             //  该节点字符不在字典树上
             if (tempNode == null) {
@@ -135,13 +153,21 @@ public class SensitiveService implements InitializingBean {
         return result.toString();
     }
 
+    // 优化过滤，如过滤掉：色 情
+    private boolean isSymbol(char c) {
+        int ic = (int) c;
+
+        // 0x2E80- 0x9FFF 代表东亚文字范围
+        return !CharUtils.isAsciiAlphanumeric(c) && (ic < 0x2E80 || ic > 0x9FFF);
+    }
+
 
     public static void main(String[] args) {
         SensitiveService s = new SensitiveService();
         s.addWord("色情");
         s.addWord("赌博");
 
-        System.out.print(s.filter("你好色情haha"));
+        System.out.print(s.filter("  v 你好色v 情haha"));
     }
 
 
