@@ -4,6 +4,7 @@ import com.minmin.wenda.dao.QuestionDAO;
 import com.minmin.wenda.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -20,6 +21,12 @@ public class QuestionService {
 
     public int addQuestion(Question question) {
         // TODO 敏感词过滤
+
+
+        // Html标签过滤
+        question.setContent(HtmlUtils.htmlEscape(question.getContent()));
+        question.setTitle(HtmlUtils.htmlEscape(question.getTitle()));
+
         return questionDAO.addQuestion(question) > 0 ? question.getId() : 0;
     }
 
