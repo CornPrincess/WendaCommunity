@@ -22,16 +22,16 @@
         Number: $kv.key, Value: $kv.value
     #end
 
-    User:  $!{user.name}
-    $!{user.description}
-    $!{user.getDescription()}
+    User:  $!{User.name}
+    $!{User.description}
+    $!{User.getDescription()}
 
     #set($title = "nowcoder_title")
     Title: $!{title}
 
 
-    Parse: #parse("header.html")
-    Include: #include("header.html")
+    Parse: #parse("header_ref.html")
+    Include: #include("header_ref.html")
 
     #macro (render_color, $index, $color)
         Color Render Macro $index, $color

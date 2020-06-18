@@ -1,10 +1,16 @@
 package com.minmin.wenda.controller;
 
 import com.minmin.wenda.model.User;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -101,20 +107,60 @@ public class demo {
         model.addAttribute("value1", "v11");
 
         // add list
-        List<String> colors = Arrays.asList(new String[]{"RED", "GREEN", "BLUE"});
+        List<String> colors = Arrays.asList("RED", "GREEN", "BLUE");
         model.addAttribute("colors", colors);
 
         // add map
-        Map<String, String> map = new HashMap();
+        Map<String, String> map = new HashMap<>();
         for (int i = 0; i < 4; i++) {
             map.put(String.valueOf(i), String.valueOf(i * i));
         }
         model.addAttribute("map", map);
 
         // add class
-        model.addAttribute("User", new User("minmin"));
+        // no use
+        model.addAttribute("user", new User("minmin"));
+
+        // effect
+        // add only get method, can use user.description user.getDescription()
+        User user = new User("xiaowei");
+        model.addAttribute("User", user);
 
         return "demo";
+    }
+
+    @RequestMapping(path = {"/request"})
+    @ResponseBody
+    public String request(Model model,
+                          HttpServletRequest request,
+                          HttpServletResponse response,
+                          HttpSession session,
+                          @CookieValue("JSESSIONID") String sessionId) throws IOException {
+        String sb = request.getMethod() + "<br>" +
+                request.getQueryString() + "<br>" +
+                request.getPathInfo() + "<br>" +
+                request.getRequestURI() + "<br>";
+        sb += "sessionId: " + sessionId;
+
+        response.addHeader("minmin", "hello");
+        response.addCookie(new Cookie("wei1", "love"));
+        // 可用来返回验证码
+//        response.getOutputStream().write(1);
+        return sb;
+    }
+
+    // 302 redirect
+    @RequestMapping(value = "/redirect/{code}")
+    public String redirect(@PathVariable("code") int code,
+                           HttpSession httpSession) {
+        httpSession.setAttribute("msg", "I love minmin" + code);
+        return "redirect:/demo/test";
+    }
+
+    @RequestMapping(value = "/test")
+    @ResponseBody
+    public String redirectTest(HttpSession httpSession) {
+        return "" + httpSession.getAttribute("msg");
     }
 
     @RequestMapping()
