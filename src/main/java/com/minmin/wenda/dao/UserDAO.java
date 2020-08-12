@@ -2,7 +2,6 @@ package com.minmin.wenda.dao;
 
 import com.minmin.wenda.model.User;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Service;
 
 /**
  * @author corn

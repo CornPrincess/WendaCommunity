@@ -22,19 +22,24 @@ import java.util.Date;
 public class LogAspect {
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
 
-    @Before("execution(* com.minmin.wenda.controller.*Controller.*(..))")
+    @Before("execution(* com.minmin.wenda.controller.*.*(..))")
     public void beforeMethod(JoinPoint joinPoint) {
         StringBuilder sb = new StringBuilder();
         for(Object arg : joinPoint.getArgs())
             if(arg != null) {
                 sb.append("arg:" + arg.toString() + "|");
             }
-        log.info("before method" + sb.toString());
+        log.info("before method" + sb.toString() + new Date());
     }
 
     @After("execution(* com.minmin.wenda.controller.IndexController.*(..))")
     public void afterMethod() {
         log.info("after method" + new Date());
+    }
+
+    @After("execution(* com.minmin.wenda.controller.*.*(..))")
+    public void afterMethod2() {
+        log.info("after method " + new Date());
     }
 
 }

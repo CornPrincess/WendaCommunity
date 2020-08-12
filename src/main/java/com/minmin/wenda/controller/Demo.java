@@ -1,10 +1,13 @@
 package com.minmin.wenda.controller;
 
 import com.minmin.wenda.model.User;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +26,8 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/demo")
-public class demo {
+public class Demo {
+    private static final Logger log = LoggerFactory.getLogger(Demo.class);
 
     /*
         value， method；
@@ -149,12 +153,26 @@ public class demo {
         return sb;
     }
 
-    // 302 redirect
+    // 302 redirect 临时跳转
     @RequestMapping(value = "/redirect/{code}")
     public String redirect(@PathVariable("code") int code,
                            HttpSession httpSession) {
         httpSession.setAttribute("msg", "I love minmin" + code);
         return "redirect:/demo/test";
+    }
+
+    // 301 redirect 强制跳转，永久跳转，浏览器会从缓存中直接读取
+    // 跳转的作用：1. 如果检测到客户端是手机，直接跳转到对应到手机页面
+    //            2. 如果之前发布到页面不能使用，可以直接跳转到老的页面
+    @RequestMapping(value = "/redirect2/{code}")
+    public RedirectView redirect2(@PathVariable("code") int code,
+                                 HttpSession httpSession) {
+        httpSession.setAttribute("msg", "I love minmin " + code);
+        RedirectView redirectView = new RedirectView("/demo/test", true);
+        if (code == 301) {
+            redirectView.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        }
+        return redirectView;
     }
 
     @RequestMapping(value = "/test")
@@ -171,8 +189,23 @@ public class demo {
 
     @RequestMapping("*")
     @ResponseBody
+    public String admin(@RequestParam("key") String key) {
+        log.info("welcome to admin");
+        if ("admin".equals(key)) {
+            return "hello admin";
+        }
+        throw new IllegalArgumentException("error key");
+    }
+
+    @ResponseBody
     public String fallbackMethod() {
         return "fallback method";
+    }
+
+    @ExceptionHandler
+    @ResponseBody
+    public String errorHandler(Exception e) {
+        return "Error: " + e.getMessage();
     }
 
 }

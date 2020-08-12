@@ -64,4 +64,15 @@ public class User {
     public String getDescription() {
         return this.name + "haha";
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", headUrl='" + headUrl + '\'' +
+                '}';
+    }
 }

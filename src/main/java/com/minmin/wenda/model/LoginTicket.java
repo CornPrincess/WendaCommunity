@@ -5,6 +5,7 @@ import java.util.Date;
 /**
  * @author corn
  * @version 1.0.0
+ * save the login user info
  */
 public class LoginTicket {
     private int id;

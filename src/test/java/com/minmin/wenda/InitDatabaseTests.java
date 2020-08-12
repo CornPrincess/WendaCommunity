@@ -7,6 +7,7 @@ import com.minmin.wenda.model.LoginTicket;
 import com.minmin.wenda.model.Question;
 import com.minmin.wenda.model.User;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,19 @@ public class InitDatabaseTests {
 
 	@Autowired
 	LoginTicketDAO loginTicketDAO;
+
+	@Before
+	public void init_user() {
+		Random random = new Random();
+		for(int i = 0; i < 11; i++) {
+			User user = new User();
+			user.setHeadUrl(String.format("http://images.nowcoder.com/head/%dt.png", random.nextInt(1000)));
+			user.setName(String.format("USER%d", i));
+			user.setPassword("");
+			user.setSalt("");
+			userDAO.addUser(user);
+		}
+	}
 
 	@Test
 	public void initDatabase() {
@@ -76,4 +90,22 @@ public class InitDatabaseTests {
 		loginTicketDAO.addTicket(loginTicket);
 	}
 
+	@Test
+	public void test_insert_user() {
+		Random random = new Random();
+		User user = new User();
+		user.setHeadUrl(String.format("http://images.nowcoder.com/head/%dt.png", random.nextInt(1000)));
+		user.setName(String.format("USER%d", 12));
+		user.setPassword("");
+		user.setSalt("");
+		userDAO.addUser(user);
+	}
+
+	@Test
+	public void test_update_user() {
+		User user = userDAO.selectById(1);
+		System.out.println(user);
+		user.setPassword("loveminmin");
+		userDAO.updatePassword(user);
+	}
 }
