@@ -187,14 +187,24 @@ public class Demo {
         return "default method";
     }
 
-    @RequestMapping("*")
+    @RequestMapping(value = "*", method = RequestMethod.GET)
     @ResponseBody
     public String admin(@RequestParam("key") String key) {
-        log.info("welcome to admin");
+        log.info("welcome to get admin");
         if ("admin".equals(key)) {
-            return "hello admin";
+            return "hello get  admin";
         }
-        throw new IllegalArgumentException("error key");
+        throw new IllegalArgumentException("error get key");
+    }
+
+    @RequestMapping(value = "*", method = RequestMethod.POST)
+    @ResponseBody
+    public String adminPost(@RequestParam("key") String key) {
+        log.info("welcome to post admin");
+        if ("admin".equals(key)) {
+            return "hello post admin";
+        }
+        throw new IllegalArgumentException("error post key");
     }
 
     @ResponseBody

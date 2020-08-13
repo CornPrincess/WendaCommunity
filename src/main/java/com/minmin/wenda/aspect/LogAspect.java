@@ -29,12 +29,12 @@ public class LogAspect {
             if(arg != null) {
                 sb.append("arg:" + arg.toString() + "|");
             }
-        log.info("before method" + sb.toString() + new Date());
+        log.info("before method: " + sb.toString() + new Date());
     }
 
     @After("execution(* com.minmin.wenda.controller.IndexController.*(..))")
     public void afterMethod() {
-        log.info("after method" + new Date());
+        log.info("after method " + new Date());
     }
 
     @After("execution(* com.minmin.wenda.controller.*.*(..))")
