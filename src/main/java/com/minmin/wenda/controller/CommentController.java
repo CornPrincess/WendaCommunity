@@ -1,6 +1,7 @@
 package com.minmin.wenda.controller;
 
 import com.minmin.wenda.model.Comment;
+import com.minmin.wenda.model.EntityType;
 import com.minmin.wenda.model.HostHolder;
 import com.minmin.wenda.service.CommentService;
 import com.minmin.wenda.service.QuestionService;
@@ -58,10 +59,11 @@ public class CommentController {
             }
             comment.setContent(content);
             comment.setEntityId(questionId);
-//            comment.setEntityType(EntityType.ENTITY_QUESTION);
+            comment.setEntityType(EntityType.ENTITY_QUESTION);
             comment.setCreatedDate(new Date());
             comment.setStatus(0);
 
+            // TODO 这里增加评论和更新评论数正常需要事务，但是我们可以把业务写成异步的
             commentService.addComment(comment);
             // 更新题目里的评论数量
             int count = commentService.getCommentCount(comment.getEntityId(), comment.getEntityType());

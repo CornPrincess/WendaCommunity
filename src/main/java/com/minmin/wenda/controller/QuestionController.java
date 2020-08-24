@@ -1,7 +1,7 @@
 package com.minmin.wenda.controller;
 
-import com.minmin.wenda.model.HostHolder;
-import com.minmin.wenda.model.Question;
+import com.minmin.wenda.model.*;
+import com.minmin.wenda.service.CommentService;
 import com.minmin.wenda.service.QuestionService;
 import com.minmin.wenda.service.UserService;
 import com.minmin.wenda.util.WendaUtil;
@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author corn
@@ -30,6 +32,9 @@ public class QuestionController {
 
     @Autowired
     HostHolder hostHolder;
+
+    @Autowired
+    CommentService commentService;
 
     @RequestMapping(value = "/question/add", method = {RequestMethod.POST})
     @ResponseBody
@@ -65,6 +70,16 @@ public class QuestionController {
         Question question = questionService.selectById(qid);
         model.addAttribute("question", question);
         model.addAttribute("user", userService.getUser(question.getUserId()));
+
+        List<Comment> commentList = commentService.getCommentsByEntity(qid, EntityType.ENTITY_QUESTION);
+        List<ViewObject> vos = new ArrayList<>();
+        for (Comment comment : commentList) {
+            ViewObject vo = new ViewObject();
+            vo.set("comment", comment);
+            vo.set("user", userService.getUser(comment.getUserId()));
+            vos.add(vo);
+        }
+        model.addAttribute("comments", vos);
 
         return "detail";
     }
