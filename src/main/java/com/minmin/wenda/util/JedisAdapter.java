@@ -1,14 +1,14 @@
 package com.minmin.wenda.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.minmin.wenda.model.User;
 import lombok.extern.slf4j.Slf4j;
-import netscape.javascript.JSObject;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.*;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,7 +41,7 @@ public class JedisAdapter implements InitializingBean {
         try (Jedis jedis = jedisPool.getResource()) {
             jedis.srem(key, value);
         } catch (Exception e) {
-            log.error("jedis sadd error: " + e.getMessage());
+            log.error("jedis srem error: " + e.getMessage());
         }
         return 0;
     }
@@ -50,7 +50,7 @@ public class JedisAdapter implements InitializingBean {
         try (Jedis jedis = jedisPool.getResource()) {
             return jedis.scard(key);
         } catch (Exception e) {
-            log.error("jedis sadd error: " + e.getMessage());
+            log.error("jedis scard error: " + e.getMessage());
         }
         return 0;
     }
@@ -59,8 +59,27 @@ public class JedisAdapter implements InitializingBean {
         try (Jedis jedis = jedisPool.getResource()) {
             return jedis.sismember(key, value);
         } catch (Exception e) {
-            log.error("jedis sadd error: " + e.getMessage());
+            log.error("jedis sismember error: " + e.getMessage());
         }
         return false;
     }
+
+    public List<String> brpop(int timeout, String key) {
+        try (Jedis jedis = jedisPool.getResource();) {
+            return jedis.brpop(timeout, key);
+        } catch (Exception e) {
+            log.error("jedis brpop error: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public long lpush(String key, String value) {
+        try (Jedis jedis = jedisPool.getResource();) {
+            return jedis.lpush(key, value);
+        } catch (Exception e) {
+            log.error("jedis brpop error: " + e.getMessage());
+        }
+        return 0;
+    }
+
 }
