@@ -8,8 +8,6 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ListPosition;
 import redis.clients.jedis.Tuple;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by IntelliJ IDEA.
  * User: zhoutianbin

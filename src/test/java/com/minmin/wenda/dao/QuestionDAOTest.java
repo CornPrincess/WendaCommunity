@@ -2,7 +2,6 @@ package com.minmin.wenda.dao;
 
 import com.minmin.wenda.WendaApplication;
 import com.minmin.wenda.model.Question;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by IntelliJ IDEA.
