@@ -35,11 +35,13 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
 
     @Override
     public void afterPropertiesSet() {
+        // 在系统启动时找到所有实现 EventHandler 的类
         Map<String, EventHandler> beans = applicationContext.getBeansOfType(EventHandler.class);
         if (beans != null) {
             for (Map.Entry<String, EventHandler> eventHandlerEntry: beans.entrySet()) {
                 List<EventType> eventTypes = eventHandlerEntry.getValue().getSupportEventTypes();
 
+                // 初始化 config。 即 EventType 和 EventHandler 的关系
                 for (EventType type: eventTypes) {
                     if (!config.containsKey(type)) {
                         config.put(type, new ArrayList<>());
@@ -49,6 +51,7 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
             }
         }
 
+        // TODO 这里可以使用线程池来改进，加快处理速度
         Thread thread = new Thread(() -> {
             while (true) {
                 String key = RedisKeyUtil.getEventQueueKey();

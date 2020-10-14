@@ -1,5 +1,8 @@
 package com.minmin.wenda.controller;
 
+import com.minmin.wenda.async.EventModel;
+import com.minmin.wenda.async.EventProducer;
+import com.minmin.wenda.async.EventType;
 import com.minmin.wenda.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -28,6 +31,9 @@ public class LoginController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EventProducer eventProducer;
 
 
     // register controller
@@ -83,7 +89,7 @@ public class LoginController {
 
 
         try {
-            Map<String, String> map =  userService.login(username, password);
+            Map<String, Object> map =  userService.login(username, password);
 
             // add cookie
             if(map.containsKey("ticket")) {
@@ -94,6 +100,10 @@ public class LoginController {
                     cookie.setMaxAge(3600*24*5);
                 }
                 response.addCookie(cookie);
+
+                eventProducer.fireEvent(new EventModel(EventType.LOGIN)
+                        .setExt("username", username).setExt("email", "to@qq.com")
+                        .setActorId((int)map.get("userId")));
 
                 // 跳转
                 if(StringUtils.isNotBlank(next)) {

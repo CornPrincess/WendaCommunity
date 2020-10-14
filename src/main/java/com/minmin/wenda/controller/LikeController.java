@@ -49,7 +49,7 @@ public class LikeController {
             .setEntityType(EntityType.ENTITY_COMMENT)
             .setEntityId(commentId)
             .setEntityOwnerId(comment.getUserId())
-            .setExts("questionId", String.valueOf(comment.getEntityId())));
+            .setExt("questionId", String.valueOf(comment.getEntityId())));
 
         long likeCount = likeService.like(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT, commentId);
         return WendaUtil.getJSONString(0, String.valueOf(likeCount));
