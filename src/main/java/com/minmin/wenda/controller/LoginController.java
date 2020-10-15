@@ -101,9 +101,10 @@ public class LoginController {
                 }
                 response.addCookie(cookie);
 
-                eventProducer.fireEvent(new EventModel(EventType.LOGIN)
-                        .setExt("username", username).setExt("email", "to@qq.com")
-                        .setActorId((int)map.get("userId")));
+                // TODO send email to user when ip is abnormal
+//                eventProducer.fireEvent(new EventModel(EventType.LOGIN)
+//                        .setExt("username", username).setExt("email", "to@qq.com")
+//                        .setActorId((int)map.get("userId")));
 
                 // 跳转
                 if(StringUtils.isNotBlank(next)) {

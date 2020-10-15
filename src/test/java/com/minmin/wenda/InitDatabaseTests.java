@@ -3,9 +3,11 @@ package com.minmin.wenda;
 import com.minmin.wenda.dao.LoginTicketDAO;
 import com.minmin.wenda.dao.QuestionDAO;
 import com.minmin.wenda.dao.UserDAO;
+import com.minmin.wenda.model.EntityType;
 import com.minmin.wenda.model.LoginTicket;
 import com.minmin.wenda.model.Question;
 import com.minmin.wenda.model.User;
+import com.minmin.wenda.service.FollowService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +34,9 @@ public class InitDatabaseTests {
 	@Autowired
 	LoginTicketDAO loginTicketDAO;
 
+	@Autowired
+	FollowService followService;
+
 	@Before
 	public void init_user() {
 		Random random = new Random();
@@ -57,6 +62,9 @@ public class InitDatabaseTests {
 			user.setSalt("");
 			userDAO.addUser(user);
 
+			for (int j = 1; j < i; ++j) {
+				followService.follow(j, EntityType.ENTITY_USER, i);
+			}
 
 			user.setPassword("loveminmin");
 			userDAO.updatePassword(user);

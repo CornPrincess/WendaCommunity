@@ -21,6 +21,10 @@ public class QuestionService {
     @Autowired
     SensitiveService sensitiveService;
 
+    public Question getById(int id) {
+        return questionDAO.getById(id);
+    }
+
 
     public int addQuestion(Question question) {
         // TODO 敏感词过滤
